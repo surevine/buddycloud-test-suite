@@ -17,15 +17,16 @@ package org.buddycloud.channelserver.discovery;
 
 import junit.framework.Assert;
 
-import org.buddycloud.channelserver.ChannelServerTest;
+import org.buddycloud.channelserver.ChannelServerTestHelper;
 import org.jivesoftware.smack.packet.Packet;
 import org.junit.Test;
+import org.junit.Ignore;
 
 /**
  * @author Abmar
  *
  */
-public class DiscoveryTest extends ChannelServerTest {
+public class DiscoveryTest extends ChannelServerTestHelper {
 
 	@Test
 	public void testDiscoveryInfo() throws Exception {
@@ -38,6 +39,7 @@ public class DiscoveryTest extends ChannelServerTest {
 	}
 	
 	@Test
+	@Ignore("Doesn't seem to be ready yet")
 	public void testDiscoveryItems() throws Exception {
 		
 		Packet packet = getPacket("resources/discovery/discovery-item.request");

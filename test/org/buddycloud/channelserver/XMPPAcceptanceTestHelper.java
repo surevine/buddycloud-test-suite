@@ -28,6 +28,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.Text;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathFactory;
+import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
@@ -41,7 +42,7 @@ import org.jivesoftware.smack.util.SyncPacketSend;
  * @author Abmar
  *
  */
-public class XMPPAcceptanceTest {
+public class XMPPAcceptanceTestHelper {
 
 	private TestContext tc;
 	private XMPPConnection xmppConnection;
@@ -52,15 +53,28 @@ public class XMPPAcceptanceTest {
 	 */
 	protected void initConnection() throws XMPPException {
 		ConnectionConfiguration cc = new ConnectionConfiguration(
-				tc.getServerHostname(), tc.getServerPort(), tc.getServiceName());
-		
-		this.xmppConnection = new XMPPConnection(cc);
+				tc.getServerHostname(), tc.getServerPort());
+
+		this.xmppConnection      = new XMPPConnection(cc);
 		xmppConnection.connect();
 		xmppConnection.login(tc.getClientUser(), tc.getClientPass(), tc.getClientResource());
 		
 		xmppConnection.addPacketListener(new PacketListener() {
 			@Override
 			public void processPacket(Packet packet) {
+				System.out.println("    --- Receiving packet ---");
+				System.out.println(packet.toXML());
+			}
+		}, new PacketFilter() {
+			@Override
+			public boolean accept(Packet packet) {
+				return packet instanceof IQ;
+			}
+		});
+	    xmppConnection.addPacketSendingListener(new PacketListener() {
+			@Override
+			public void processPacket(Packet packet) {
+				System.out.println("    --- Sending packet ---");
 				System.out.println(packet.toXML());
 			}
 		}, new PacketFilter() {
@@ -77,7 +91,7 @@ public class XMPPAcceptanceTest {
 	
 	private TestPacket preparePacket(String packetXml) {
 		
-		packetXml = packetXml.replaceAll("\n", "");
+		packetXml = packetXml.replaceAll(".*>(.*)<[^/].*", "");
 		TestPacket p = new TestPacket(packetXml);
 		
 		String id = Packet.nextID();

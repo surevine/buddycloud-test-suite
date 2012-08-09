@@ -13,37 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.buddycloud.channelserver.discovery;
+package org.buddycloud.channelserver.channel;
 
 import junit.framework.Assert;
 
-
 import org.buddycloud.channelserver.ChannelServerTestHelper;
-import org.buddycloud.channelserver.TestPacket;
 import org.jivesoftware.smack.packet.Packet;
 import org.junit.Test;
-import org.junit.Ignore;
 
 /**
- * @author Abmar
+ * @author Lloyd Watkin <lloyd.watkn@surevine.com>
  *
  */
-public class FirehoseTest extends ChannelServerTestHelper {
+public class ChannelCreateTest extends ChannelServerTestHelper {
 
 	@Test
-	@Ignore("Doesn't appear to be ready yet")
-	public void testFirehose() throws Exception {
+	public void testCreateChannel() throws Exception {
 		
-		TestPacket packet = getPacket("resources/discovery/discovery-node.request");
-		packet.setVariable("$NODE", "/firehose");
-		
+		Packet packet = getPacket("resources/channel/channel-create.request");
 		Packet reply = sendPacket(packet);
-
+		System.out.println("---  create channel ---");
+		System.out.println(packet);
+        System.out.println(reply);
 		Assert.assertEquals(packet.getPacketID(), getValue(reply, "/iq/@id"));
-		Assert.assertTrue(exists(reply, 
-				"/iq/query/identity[@type='channel' and @category='pubsub']"));
-		
-	}
-
-
+		Assert.assertTrue(exists(reply, "/iq/query/identity[@type='channels' and @category='pubsub']"));
+	}	
 }

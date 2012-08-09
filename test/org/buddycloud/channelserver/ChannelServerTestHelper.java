@@ -24,7 +24,7 @@ import org.junit.Before;
  * @author Abmar
  *
  */
-public class ChannelServerTest extends XMPPAcceptanceTest {
+public class ChannelServerTestHelper extends XMPPAcceptanceTestHelper {
 
 	private static final String PROPERTIES_FILE = "suite.properties";
 	
@@ -37,6 +37,8 @@ public class ChannelServerTest extends XMPPAcceptanceTest {
 		TestContext tc = new TestContext();
 		
 		tc.setTo(configuration.getProperty("channelserver_to_test"));
+		tc.setTopicChannelServer(configuration.getProperty("topic_channel_server"));
+
 		tc.setClientUser(configuration.getProperty("testclient_user"));
 		tc.setClientPass(configuration.getProperty("testclient_pass"));
 		
